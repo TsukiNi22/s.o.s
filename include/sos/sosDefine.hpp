@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 08/07/2026 by @author Tsukini
+##  @date 09/07/2026 by @author Tsukini
 
 File Name:
 ##  @file sosDefine.hpp
@@ -57,7 +57,6 @@ enum class Option: std::uint8_t {
     None        = 0,
     Noise       = 1 << 0,
     GlobalNoise = 1 << 1,
-    Secured     = 1 << 2
 };
 
 } // namespace end

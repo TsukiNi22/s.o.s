@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 08/07/2026 by @author Tsukini
+##  @date 09/07/2026 by @author Tsukini
 
 File Name:
 ##  @file embed_simplified.hpp
@@ -37,11 +37,6 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
 {
     alignas(std::hardware_destructive_interference_size) std::vector<std::uint_fast32_t> index;
     alignas(std::hardware_destructive_interference_size) sos::Bytes bytes;
-
-    // Check if the key was given
-    if (!key.has_value()) [[unlikely]] {
-        throw std::invalid_argument("Can't enable the secured option if no key is given");
-    }
 
     // Setup message (header data + payload)
     bytes.push_back(magic);
@@ -85,8 +80,8 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
     std::uint_fast32_t seed = sos::tools::hash(index, carrier);
     index.resize(index.size() - SEED_ELEMENT_COUNT);
 
-    // Apply key to the seed
-    if constexpr (options & sos::Option::Secured) {
+    // Apply key to the seed if given
+    if (key.has_value()) [[unlikely]] {
         for (sos:Byte byte: *key) {
             seed ^= static_cast<std::uint_fast32_t>(b);
             seed *= 16777619u;
