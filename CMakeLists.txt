@@ -23,11 +23,6 @@ endif()
 # =========================
 # Warnings
 # =========================
-message(WARNING
-    "⚠️ This library contains no real source files.\n"
-    "This project is effectively header-only.\n"
-    "Only '--target install' is meaningful."
-)
 add_compile_options(
     -W
     -Wall
@@ -42,7 +37,9 @@ add_compile_options(
 # Sources
 # =========================
 set(SRC
-    src/nothing.cpp
+    src/sos/tools/hash.cpp
+    src/sos/tools/noise.cpp
+    src/sos/tools/threshold.cpp
 )
 add_library(${TARGET} STATIC ${SRC})
 #add_library(${TARGET} SHARED ${SRC})

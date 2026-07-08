@@ -11,31 +11,25 @@ Edition:
 ##  @date 08/07/2026 by @author Tsukini
 
 File Name:
-##  @file sosType.hpp
+##  @file embed_optimized.hpp
 
 File Description:
-##  You know, I don t think there are good or bad descriptions,
-##  for me, life is all about functions...
+##  Optimized embed version of the s.o.s algorithm
 \**************************************************************/
 
-#ifndef SOSTYPE_H
-    #define SOSTYPE_H
+#include "../sosDefine.hpp"
+#include "../sosType.hpp"
+#include <optional>
+#include <cstdint>
 
-    //----------------------------------------------------------------//
-    /* INCLUDE */
+namespace sos::algorithm { // namespace start
 
-    /* type */
-    #include <cstdint>  // std::uint8_t
-    #include <vector>   // std::vector
-
-namespace sos { // namespace start
-//----------------------------------------------------------------//
-/* TYPE */
-
-/* type simplification */
-using Byte = std::uint8_t;
-using Bytes = std::vector<sos::Byte>;
-using Key = Bytes;
+#ifndef SOS_EMBED_OPTIMIZED
+    #define SOS_EMBED_OPTIMIZED
+template<sos::Option options = sos::Option::None, std::uint8_t magic = MAGIC>
+void sos_embed_optimized(sos::Bytes& carrier, const sos::Bytes& payload, const std::optional<sos::Key>& key)
+{
+}
+#endif /* SOS_EMBED_OPTIMIZED */
 
 } // namespace end
-#endif /* SOSTYPE_H */

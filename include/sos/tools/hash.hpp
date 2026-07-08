@@ -11,31 +11,28 @@ Edition:
 ##  @date 08/07/2026 by @author Tsukini
 
 File Name:
-##  @file sosType.hpp
+##  @file hash.hpp
 
 File Description:
-##  You know, I don t think there are good or bad descriptions,
-##  for me, life is all about functions...
+##  Include of the hash generation tools
 \**************************************************************/
 
-#ifndef SOSTYPE_H
-    #define SOSTYPE_H
+#ifndef HASH_H
+    #define HASH_H
 
     //----------------------------------------------------------------//
     /* INCLUDE */
 
     /* type */
-    #include <cstdint>  // std::uint8_t
-    #include <vector>   // std::vector
+    #include "../sosType.hpp"   // sos::* (type)
+    #include <cstdint>          // std::uint_fast32_t
+    #include <vector>           // std::vector
 
-namespace sos { // namespace start
+namespace sos::tools { // namespace start
 //----------------------------------------------------------------//
-/* TYPE */
+/* PROTOTYPE */
 
-/* type simplification */
-using Byte = std::uint8_t;
-using Bytes = std::vector<sos::Byte>;
-using Key = Bytes;
+std::uint_fast32_t hash(const std::vector<std::uint_fast32_t>& index, const sos::Bytes& bytes);
 
 } // namespace end
-#endif /* SOSTYPE_H */
+#endif /* HASH_H */

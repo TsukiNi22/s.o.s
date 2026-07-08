@@ -25,9 +25,31 @@ File Description:
     /* INCLUDE */
 
     /* type */
-    #include <cstdint>  // std::uint8_t
+    #include "sosType.hpp"  // sos::Byte
+    #include <cstdint>      // std::uint8_t
+    #include <limits>       // std::numeric_limits<T>
 
-namespace sos::algorithm { // namespace start
+    //----------------------------------------------------------------//
+    /* DEFINE */
+
+    /* const */
+    #define MAGIC 0x22
+    #define NOISE_COEF 0.0025 // 0.001 < Studio < 0.005 < Mic < 0.02 (noise coef for amplitude)
+    #define SEED_ELEMENT_COUNT 256 // number of index used for the seed creation
+
+    /* values */
+    #define UINTN_MIN std::numeric_limits<sos::Byte>::min()
+    #define UINTN_MAX std::numeric_limits<sos::Byte>::max()
+
+    /* limits */
+    #define RMS_LIMIT 250.0 // 100 ~ 5000 normal
+    #define PAYLOAD_PERCENTAGE_LIMIT 0.075 // The payload can only be x percent of the total signal at max
+    #define THRESHOLD_MIN (1u << (sizeof(sos::Byte) * 8 / 2))
+    #define THRESHOLD_MAX (UINTN_MAX - (1u << (sizeof(sos::Byte) * 8 / 2)))
+    #define RANGE_USED_MIN (UINTN_MAX * 0.05) // Need at least x percentage of the whole range
+    #define RANGE_USED_MAX (UINTN_MAX * (1.0 - 0.05)) // Need less than x percentage of the whole range
+
+namespace sos { // namespace start
 //----------------------------------------------------------------//
 /* ENUM */
 
@@ -35,7 +57,7 @@ enum class Option: std::uint8_t {
     None        = 0,
     Noise       = 1 << 0,
     GlobalNoise = 1 << 1,
-    Secure      = 1 << 2
+    Secured     = 1 << 2
 };
 
 } // namespace end

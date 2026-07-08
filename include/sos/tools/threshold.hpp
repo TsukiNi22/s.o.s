@@ -11,21 +11,29 @@ Edition:
 ##  @date 08/07/2026 by @author Tsukini
 
 File Name:
-##  @file embed_optimized.cpp
+##  @file threshold.hpp
 
 File Description:
-##  Optimized embed version of the s.o.s algorithm
+##  Include of the threshold tools
 \**************************************************************/
 
-#include "../sosDefine.hpp"
-#include "../sosType.hpp"
-#include <optional>
+#ifndef THRESHOLD_H
+    #define THRESHOLD_H
 
-namespace sos::algorithm { // namespace start
+    //----------------------------------------------------------------//
+    /* INCLUDE */
 
-template<sos::algorithm::Option options = sos::algorithm::Option::None, std::uint8_t magic = 0x22>
-void sos::algorithm::sos_embed_optimized(const sos::algorithm::Bytes& carrier, const sos::algorithm::Bytes& payload, const std::optional<sos::algorithm::Key>& key)
-{
-}
+    /* type */
+    #include "../sosType.hpp"   // sos::* (type)
+    #include <cstdint>          // std::uint_fast32_t
+    #include <vector>           // std::vector
+
+namespace sos::tools { // namespace start
+//----------------------------------------------------------------//
+/* PROTOTYPE */
+
+void getThresholdIndex(std::vector<std::uint_fast32_t>& index, const sos::Bytes& bytes);
+void removeThreshold(sos::Bytes& bytes);
 
 } // namespace end
+#endif /* THRESHOLD_H */

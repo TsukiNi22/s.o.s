@@ -11,22 +11,25 @@ Edition:
 ##  @date 08/07/2026 by @author Tsukini
 
 File Name:
-##  @file extract_simplified.cpp
+##  @file extract_optimized.hpp
 
 File Description:
-##  Simplified (outdated) extract version of the s.o.s algorithm
+##  Optimized extract version of the s.o.s algorithm
 \**************************************************************/
 
 #include "../sosDefine.hpp"
 #include "../sosType.hpp"
 #include <optional>
+#include <cstdint>
 
 namespace sos::algorithm { // namespace start
 
-template<std::uint8_t magic = 0x22>
-[[deprecated("This version isn't the most optimized one, you should use sos_extract_simplified or sos")]]
-[[nodiscard]] sos::algorithm::Bytes sos::algorithm::sos_extract_simplified(const sos::algorithm::Bytes& carrier, const std::optional<sos::algorithm::Key>& key)
+#ifndef SOS_EXTRACT_OPTIMIZED
+    #define SOS_EXTRACT_OPTIMIZED
+template<std::uint8_t magic = MAGIC>
+[[nodiscard]] sos::Bytes sos_extract_optimized(const sos::Bytes& carrier, const std::optional<sos::algorithm::Key>& key)
 {
 }
+#endif /* SOS_EXTRACT_OPTIMIZED */
 
 } // namespace end

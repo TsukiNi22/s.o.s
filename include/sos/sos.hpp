@@ -26,22 +26,22 @@ File Description:
     /* type */
     #include "algorithm/embed_optimized.cpp"    // sos::algorithm::sos_embed_optimized
     #include "algorithm/extract_optimized.cpp"  // sos::algorithm::sos_extract_optimized
-    #include "sosDefine.hpp"                    // sos::algorithm::Option
-    #include "sosType.hpp"                      // sos::algorithm::Bytes
+    #include "sosDefine.hpp"                    // sos::Option
+    #include "sosType.hpp"                      // sos::Bytes
     #include <optional>                         // std::optional, std::nullopt
     #include <cstdint>                          // std::uint8_t
 
 namespace sos { // namespace start
 
 // rediretion
-template<sos::algorithm::Option options = sos::algorithm::Option::None, std::uint8_t magic = 0x22>
-inline void sos_embed(const sos::algorithm::Bytes& carrier, const sos::algorithm::Bytes& payload, const std::optional<sos::algorithm::Key>& key = std::nullopt)
+template<sos::Option options = sos::Option::None, std::uint8_t magic = MAGIC>
+inline void sos_embed(sos::Bytes& carrier, const sos::Bytes& payload, const std::optional<sos::Key>& key = std::nullopt)
 {
     sos::algorithm::sos_embed_optimized<options, magic>(carrier, payload);
 }
 
-template<std::uint8_t magic = 0x22>
-[[nodiscard]] inline sos::algorithm::Bytes sos_extract(const sos::algorithm::Bytes& carrier, const std::optional<sos::algorithm::Key>& key = std::nullopt)
+template<std::uint8_t magic = MAGIC>
+[[nodiscard]] inline sos::Bytes sos_extract(const sos::Bytes& carrier, const std::optional<sos::Key>& key = std::nullopt)
 {
     return sos::algorithm::sos_extract_optimized<magic>(carrier);
 }
