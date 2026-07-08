@@ -11,16 +11,31 @@ Edition:
 ##  @date 08/07/2026 by @author Tsukini
 
 File Name:
-##  @file extract_simplified.cpp
+##  @file sosType.hpp
 
 File Description:
-##  Simplified (outdated) extract version of the s.o.s algorithm
+##  You know, I don t think there are good or bad descriptions,
+##  for me, life is all about functions...
 \**************************************************************/
 
-#include "sos/sos.hpp"
-#include <optional>
+#ifndef SOSTYPE_H
+    #define SOSTYPE_H
 
-[[deprecated("This version isn't the most optimized one, you should use sos_extract_simplified or sos")]]
-[[nodiscard]] sos::algorithm::Bytes sos::algorithm::sos_extract_simplified(const sos::algorithm::Bytes& carrier, const std::optional<sos::algorithm::Key>& key)
-{
-}
+    //----------------------------------------------------------------//
+    /* INCLUDE */
+
+    /* type */
+    #include <cstdint>  // std::uint8_t
+    #include <vector>   // std::vector
+
+namespace sos::algorithm { // namespace start
+//----------------------------------------------------------------//
+/* TYPE */
+
+/* type simplification */
+using Byte = std::uint8_t;
+using Bytes = std::vector<sos::algorithm::Byte>;
+using Key = Bytes;
+
+} // namespace end
+#endif /* SOSTYPE_H */

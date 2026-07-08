@@ -11,40 +11,32 @@ Edition:
 ##  @date 08/07/2026 by @author Tsukini
 
 File Name:
-##  @file sos.hpp
+##  @file sosDefine.hpp
 
 File Description:
-##  Header for include all the different algorithm
+##  You know, I don t think there are good or bad descriptions,
+##  for me, life is all about functions...
 \**************************************************************/
 
-#ifndef SOS_H
-    #define SOS_H
+#ifndef SOSDEFINE_H
+    #define SOSDEFINE_H
 
     //----------------------------------------------------------------//
     /* INCLUDE */
 
     /* type */
-    #include "algorithm/embed_optimized.cpp"    // sos::algorithm::sos_embed_optimized
-    #include "algorithm/extract_optimized.cpp"  // sos::algorithm::sos_extract_optimized
-    #include "sosDefine.hpp"                    // sos::algorithm::Option
-    #include "sosType.hpp"                      // sos::algorithm::Bytes
-    #include <optional>                         // std::optional, std::nullopt
-    #include <cstdint>                          // std::uint8_t
+    #include <cstdint>  // std::uint8_t
 
-namespace sos { // namespace start
+namespace sos::algorithm { // namespace start
+//----------------------------------------------------------------//
+/* ENUM */
 
-// rediretion
-template<sos::algorithm::Option options = sos::algorithm::Option::None, std::uint8_t magic = 0x22>
-inline void sos_embed(const sos::algorithm::Bytes& carrier, const sos::algorithm::Bytes& payload, const std::optional<sos::algorithm::Key>& key = std::nullopt)
-{
-    sos::algorithm::sos_embed_optimized<options, magic>(carrier, payload);
-}
-
-template<std::uint8_t magic = 0x22>
-[[nodiscard]] inline sos::algorithm::Bytes sos_extract(const sos::algorithm::Bytes& carrier, const std::optional<sos::algorithm::Key>& key = std::nullopt)
-{
-    return sos::algorithm::sos_extract_optimized<magic>(carrier);
-}
+enum class Option: std::uint8_t {
+    None        = 0,
+    Noise       = 1 << 0,
+    GlobalNoise = 1 << 1,
+    Secure      = 1 << 2
+};
 
 } // namespace end
-#endif /* SOS_H */
+#endif /* SOSDEFINE_H */

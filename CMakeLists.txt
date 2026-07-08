@@ -23,6 +23,11 @@ endif()
 # =========================
 # Warnings
 # =========================
+message(WARNING
+    "⚠️ This library contains no real source files.\n"
+    "This project is effectively header-only.\n"
+    "Only '--target install' is meaningful."
+)
 add_compile_options(
     -W
     -Wall
@@ -37,13 +42,7 @@ add_compile_options(
 # Sources
 # =========================
 set(SRC
-    # Optimized
-    src/sos/optimized/embed_optimized.cpp
-    src/sos/optimized/extract_optimized.cpp
-
-    # Simplifed
-    src/sos/simplified/embed_simplified.cpp
-    src/sos/simplified/extract_simplified.cpp
+    src/nothing.cpp
 )
 add_library(${TARGET} STATIC ${SRC})
 #add_library(${TARGET} SHARED ${SRC})
