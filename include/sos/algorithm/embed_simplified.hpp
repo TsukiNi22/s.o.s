@@ -23,8 +23,10 @@ File Description:
 #include "../tools/noise.hpp"       // sos::tools::noise
 #include "../tools/hash.hpp"        // sos::tools::hash
 #include <stdexcept>                // std::* (exception)
+#include <algorithm>                // std::shuffle
 #include <optional>                 // std::optional
 #include <cstdint>                  // std::uint8_t, std::uint_fast32_t
+#include <random>                   // std::mt19937
 #include <new>                      // std::hardware_destructive_interference_size
 
 namespace sos::algorithm { // namespace start
@@ -32,8 +34,8 @@ namespace sos::algorithm { // namespace start
 #ifndef SOS_EMBED_SIMPLIFIED
     #define SOS_EMBED_SIMPLIFIED
 template<sos::Option options = sos::Option::None, std::uint8_t magic = MAGIC>
-[[deprecated("This version isn't the most optimized one, you should use sos_embed_optimized or sos")]]
-void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const std::optional<sos::Key>& key)
+[[deprecated("This version isn't the most optimized one, you should use sos_embed_optimized or sos_embed")]]
+void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const std::optional<sos::Key>& key = std::nullopt)
 {
     alignas(std::hardware_destructive_interference_size) std::vector<std::uint_fast32_t> index;
     alignas(std::hardware_destructive_interference_size) sos::Bytes bytes;
@@ -67,7 +69,7 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
 
     // Check if the payload can be hiden in the carrier
     double percentage = static_cast<double>(sizeof(sos::Byte) * 8 * bytes.size()) / static_cast<double>(index.size());
-    if (percentage > PAYLOAD_PERCENTAGE_LIMIT) [[unlikely]] {
+    if (percentage > PAYLOAD_PERCENTAGE_LIMIT * 100.0) [[unlikely]] {
         throw std::out_of_range("Too few valide bytes that allow data storage, the payload percentage limit was reach: " + std::to_string(percentage / 100.0) + "%");
     }
 
@@ -82,8 +84,8 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
 
     // Apply key to the seed if given
     if (key.has_value()) [[unlikely]] {
-        for (sos:Byte byte: *key) {
-            seed ^= static_cast<std::uint_fast32_t>(b);
+        for (sos::Byte byte: *key) {
+            seed ^= static_cast<std::uint_fast32_t>(byte);
             seed *= 16777619u;
         }
     }

@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 08/07/2026 by @author Tsukini
+##  @date 09/07/2026 by @author Tsukini
 
 File Name:
 ##  @file sos.hpp
@@ -24,8 +24,9 @@ File Description:
     /* INCLUDE */
 
     /* type */
-    #include "algorithm/embed_optimized.cpp"    // sos::algorithm::sos_embed_optimized
-    #include "algorithm/extract_optimized.cpp"  // sos::algorithm::sos_extract_optimized
+    #include "algorithm/embed_optimized.hpp"    // sos::algorithm::sos_embed_optimized
+    #include "algorithm/extract_optimized.hpp"  // sos::algorithm::sos_extract_optimized
+    #include "tools/convert.hpp"                // sos::tools::to_bytes
     #include "sosDefine.hpp"                    // sos::Option
     #include "sosType.hpp"                      // sos::Bytes
     #include <optional>                         // std::optional, std::nullopt

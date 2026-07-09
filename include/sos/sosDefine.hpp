@@ -53,7 +53,7 @@ namespace sos { // namespace start
 //----------------------------------------------------------------//
 /* ENUM */
 
-enum class Option: std::uint8_t {
+enum Option {
     None        = 0,
     Noise       = 1 << 0,
     GlobalNoise = 1 << 1,

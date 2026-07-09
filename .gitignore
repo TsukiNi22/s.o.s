@@ -16,6 +16,8 @@ z
 build/
 
 ## Other
+*.png
+*.bmp
 .info
 *.old
 perf*

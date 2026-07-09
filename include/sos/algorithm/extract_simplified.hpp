@@ -32,8 +32,8 @@ namespace sos::algorithm { // namespace start
 #ifndef SOS_EXTRACT_SIMPLIFIED
     #define SOS_EXTRACT_SIMPLIFIED
 template<std::uint8_t magic = MAGIC>
-[[deprecated("This version isn't the most optimized one, you should use sos_extract_optimized or sos")]]
-[[nodiscard]] sos::Bytes sos_extract_simplified(const sos::Bytes& carrier, const std::optional<sos::algorithm::Key>& key)
+[[deprecated("This version isn't the most optimized one, you should use sos_extract_optimized or sos_extract")]]
+[[nodiscard]] sos::Bytes sos_extract_simplified(const sos::Bytes& carrier, const std::optional<sos::Key>& key = std::nullopt)
 {
     alignas(std::hardware_destructive_interference_size) std::vector<std::uint_fast32_t> index;
     alignas(std::hardware_destructive_interference_size) sos::Bytes bytes;
@@ -52,8 +52,8 @@ template<std::uint8_t magic = MAGIC>
 
     // Apply key to the seed if given
     if (key.has_value()) [[unlikely]] {
-        for (sos:Byte byte: *key) {
-            seed ^= static_cast<std::uint_fast32_t>(b);
+        for (sos::Byte byte: *key) {
+            seed ^= static_cast<std::uint_fast32_t>(byte);
             seed *= 16777619u;
         }
     }
@@ -64,13 +64,13 @@ template<std::uint8_t magic = MAGIC>
 
     // Reading byte methode
     std::size_t idx = 0;
-    auto read_byte = [&](sos::Byte& out)
+    auto read_byte = [&](sos::Byte& byte)
     {
-        out = 0;
+        byte = 0;
         for (std::size_t b = 0; b < 8; ++b) {
             std::size_t pos = index[idx++];
             int bit = carrier[pos] & 1;
-            out |= (bit << b);
+            byte |= (bit << b);
         }
     };
 
@@ -83,7 +83,7 @@ template<std::uint8_t magic = MAGIC>
 
     // Check the message header (size:4)
     std::size_t size = 0;
-    for (int i = 0; i < 4; ++i) {
+    for (std::size_t i = 0; i < sizeof(std::size_t); ++i) {
         sos::Byte byte = 0;
         read_byte(byte);
         size |= (static_cast<std::size_t>(byte) << (8 * i));
@@ -95,12 +95,8 @@ template<std::uint8_t magic = MAGIC>
     }
 
     // Get the payload
-    bytes.reserve(size);
-    for (std::size_t i = 0; i < size; ++i) {
-        sos::Byte byte = 0;
-        read_byte(byte);
-        bytes[i] = byte;
-    }
+    bytes.resize(size);
+    for (std::size_t i = 0; i < size; ++i) read_byte(bytes[i]);
 
     return bytes;
 }
