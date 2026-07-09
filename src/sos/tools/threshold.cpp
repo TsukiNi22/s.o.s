@@ -44,6 +44,7 @@ void sos::tools::removeThreshold(sos::Bytes& bytes)
     std::array<bool, UINTN_MAX + 1> seen{false};
     for (sos::Byte byte: bytes) seen[byte] = true;
     std::size_t rangeUsed = std::count(seen.begin(), seen.end(), true);
+    
     if (rangeUsed < RANGE_USED_MIN) [[unlikely]] {
         throw std::out_of_range("Too few range used can't edit thresholds, the limit was reach: " + std::to_string(rangeUsed));
     } else if (rangeUsed > RANGE_USED_MAX) [[unlikely]] {

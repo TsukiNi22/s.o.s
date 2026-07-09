@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 08/07/2026 by @author Tsukini
+##  @date 09/07/2026 by @author Tsukini
 
 File Name:
 ##  @file sosType.hpp
@@ -25,7 +25,7 @@ File Description:
     /* INCLUDE */
 
     /* type */
-    #include <cstdint>  // std::uint8_t
+    #include <cstdint>  // std::uint16_t
     #include <vector>   // std::vector
 
 namespace sos { // namespace start
@@ -33,7 +33,7 @@ namespace sos { // namespace start
 /* TYPE */
 
 /* type simplification */
-using Byte = std::uint8_t;
+using Byte = std::uint16_t;
 using Bytes = std::vector<sos::Byte>;
 using Key = Bytes;
 

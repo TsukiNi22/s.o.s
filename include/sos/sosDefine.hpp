@@ -46,8 +46,8 @@ File Description:
     #define PAYLOAD_PERCENTAGE_LIMIT 0.075 // The payload can only be x percent of the total signal at max
     #define THRESHOLD_MIN (1u << (sizeof(sos::Byte) * 8 / 2))
     #define THRESHOLD_MAX (UINTN_MAX - (1u << (sizeof(sos::Byte) * 8 / 2)))
-    #define RANGE_USED_MIN (UINTN_MAX * 0.05) // Need at least x percentage of the whole range
-    #define RANGE_USED_MAX (UINTN_MAX * (1.0 - 0.05)) // Need less than x percentage of the whole range
+    #define RANGE_USED_MIN (UINTN_MAX * 0.05) // Need at least x percentage of the whole range to ensure some security
+    #define RANGE_USED_MAX (UINTN_MAX * (1.0 - 0.05)) // Need less than x percentage of the whole range to ensure some security
 
 namespace sos { // namespace start
 //----------------------------------------------------------------//

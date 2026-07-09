@@ -41,8 +41,8 @@ template<std::uint8_t magic = MAGIC>
     // Get the valid index within the accepted amplitude
     sos::tools::getThresholdIndex(index, carrier);
 
-    // Check for the minimum space that is required (MAGIC:1 + size:4) + index used for the seed
-    if (index.size() < (sizeof(sos::Byte) + sizeof(std::size_t)) * 8 + SEED_ELEMENT_COUNT) [[unlikely]] {
+    // Check for the minimum space that is required (magic + size) + index used for the seed
+    if (index.size() < (sizeof(sos::Byte) + (sizeof(std::size_t) / sizeof(sos::Byte))) * 8 + SEED_ELEMENT_COUNT) [[unlikely]] {
         throw std::out_of_range("Too few valide bytes that allow data storage, no hidden message");
     }
 
@@ -67,26 +67,26 @@ template<std::uint8_t magic = MAGIC>
     auto read_byte = [&](sos::Byte& byte)
     {
         byte = 0;
-        for (std::size_t b = 0; b < 8; ++b) {
+        for (std::size_t b = 0; b < sizeof(sos::Byte) * 8; ++b) {
             std::size_t pos = index[idx++];
             int bit = carrier[pos] & 1;
             byte |= (bit << b);
         }
     };
 
-    // Check the message header (MAGIC:1)
+    // Check the header (magic)
     sos::Byte identifier = 0;
     read_byte(identifier);
     if (identifier != magic) [[unlikely]] {
         throw std::invalid_argument("Invalid MAGIC byte, no hidden message");
     }
 
-    // Check the message header (size:4)
+    // Check the header (size)
     std::size_t size = 0;
-    for (std::size_t i = 0; i < sizeof(std::size_t); ++i) {
+    for (std::size_t i = 0; i < sizeof(std::size_t) / sizeof(sos::Byte); ++i) {
         sos::Byte byte = 0;
         read_byte(byte);
-        size |= (static_cast<std::size_t>(byte) << (8 * i));
+        size |= (static_cast<std::size_t>(byte) << (sizeof(sos::Byte) * 8 * i));
     }
 
     // Check if there is place for the index used for the seed & payload
