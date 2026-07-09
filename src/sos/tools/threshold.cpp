@@ -20,13 +20,13 @@ File Description:
 #include "sos/tools/threshold.hpp"  // namespace
 #include "sos/sosDefine.hpp"        // sos::* (define)
 #include "sos/sosType.hpp"          // sos::* (type)
+#include <unordered_set>            // std::unordered_set
 #include <stdexcept>                // std::* (exception)
 #include <algorithm>                // std::count
 #include <optional>                 // std::optional
 #include <cstdint>                  // std::uint_fast32_t
 #include <vector>                   // std::vector
 #include <string>                   // std::to_string
-#include <array>                    // std::array
 
 void sos::tools::getThresholdIndex(std::vector<std::uint_fast32_t>& index, const sos::Bytes& bytes)
 {
@@ -41,15 +41,16 @@ void sos::tools::getThresholdIndex(std::vector<std::uint_fast32_t>& index, const
 void sos::tools::removeThreshold(sos::Bytes& bytes)
 {
     // Check the limits
-    std::array<bool, UINTN_MAX + 1> seen{false};
-    for (sos::Byte byte: bytes) seen[byte] = true;
-    std::size_t rangeUsed = std::count(seen.begin(), seen.end(), true);
-    
+    std::unordered_set<sos::Byte> seen;
+    for (sos::Byte byte: bytes) seen.insert(byte);
+    std::size_t rangeUsed = seen.size();
+
+    /*
     if (rangeUsed < RANGE_USED_MIN) [[unlikely]] {
         throw std::out_of_range("Too few range used can't edit thresholds, the limit was reach: " + std::to_string(rangeUsed));
     } else if (rangeUsed > RANGE_USED_MAX) [[unlikely]] {
         throw std::out_of_range("Too many range used can't edit thresholds, the limit was reach: " + std::to_string(rangeUsed));
-    }
+    }*/
 
     // Remove those on threshold
     for (sos::Byte& byte: bytes) {

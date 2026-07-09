@@ -39,12 +39,18 @@ sos::Bytes to_bytes(const Range& range)
     using T = std::ranges::range_value_t<Range>;
     static_assert(std::is_trivially_copyable_v<T>, "Element type must be trivially copyable.");
 
-    sos::Bytes bytes;
-    bytes.reserve(std::ranges::size(range) * sizeof(T));
-    for (const T& value: range) {
-        const auto* ptr = reinterpret_cast<const sos::Byte*>(&value);
-        bytes.insert(bytes.end(), ptr, ptr + sizeof(T));
+    std::vector<std::uint8_t> raw;
+    raw.reserve(std::ranges::size(range) * sizeof(T));
+    for (const T& value : range) {
+        const auto* ptr = reinterpret_cast<const std::uint8_t*>(&value);
+        raw.insert(raw.end(), ptr, ptr + sizeof(T));
     }
+
+    std::size_t byte_count = (raw.size() + sizeof(sos::Byte) - 1) / sizeof(sos::Byte);
+    raw.resize(byte_count * sizeof(sos::Byte), 0);
+
+    sos::Bytes bytes(byte_count);
+    std::memcpy(bytes.data(), raw.data(), raw.size());
 
     return bytes;
 }
@@ -55,18 +61,21 @@ Range bytes_to(const sos::Bytes& bytes)
     using T = std::ranges::range_value_t<Range>;
     static_assert(std::is_trivially_copyable_v<T>, "Element type must be trivially copyable.");
 
-    if (bytes.size() % sizeof(T) != 0) [[unlikely]] {
+    std::size_t raw_size = bytes.size() * sizeof(sos::Byte);
+    if (raw_size % sizeof(T) != 0) [[unlikely]] {
         throw std::invalid_argument("Invalid byte count.");
     }
 
     Range range;
-    if constexpr (requires {range.reserve(0);}) [[likely]] {
-        range.reserve(bytes.size() / sizeof(T));
+    if constexpr (requires { range.reserve(0); }) [[likely]] {
+        range.reserve(raw_size / sizeof(T));
     }
-    for (std::size_t i = 0; i < bytes.size(); i += sizeof(T)) {
+
+    const std::uint8_t* raw = reinterpret_cast<const std::uint8_t*>(bytes.data());
+    for (std::size_t i = 0; i < raw_size; i += sizeof(T)) {
         T value;
-        std::memcpy(&value, bytes.data() + i, sizeof(T));
-        if constexpr (requires {range.push_back(value);}) [[likely]] {
+        std::memcpy(&value, raw + i, sizeof(T));
+        if constexpr (requires { range.push_back(value); }) [[likely]] {
             range.push_back(value);
         } else {
             range.insert(range.end(), value);

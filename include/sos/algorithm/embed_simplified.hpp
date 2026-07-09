@@ -43,7 +43,7 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
     // Setup message (header data + payload)
     bytes.push_back(magic);
     std::size_t size = payload.size();
-    for (std::size_t i = 0; i < sizeof(size) / sizeof(sos::Byte); ++i) bytes.push_back((size >> (sizeof(sos::Byte) * 8 * i)) & UINTN_MAX);
+    for (std::size_t i = 0; i < std::max(std::size_t{1}, sizeof(size) / sizeof(sos::Byte)); ++i) bytes.push_back((size >> (sizeof(sos::Byte) * 8 * i)) & UINTN_MAX);
     bytes.insert(bytes.end(), payload.begin(), payload.end());
 
     // On noise generation (global)
@@ -75,7 +75,7 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
 
     // Check if there is place for the element used for the seed
     if (index.size() < sizeof(sos::Byte) * 8 * bytes.size() + SEED_ELEMENT_COUNT) [[unlikely]] {
-        throw std::out_of_range("Too few valide bytes that allow data storage, the limit was reach: " + std::to_string(sizeof(sos::Byte) * 8 * bytes.size() + UINTN_MAX));
+        throw std::out_of_range("Too few valide bytes that allow data storage, the limit was reach: " + std::to_string(sizeof(sos::Byte) * 8 * bytes.size() + SEED_ELEMENT_COUNT));
     }
 
     // Generate a seed
@@ -98,7 +98,7 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
     std::size_t idx = 0;
     for (std::size_t i = 0; i < bytes.size(); ++i)
     for (std::size_t j = 0; j < sizeof(sos::Byte) * 8; ++j) {
-        int bit = (bytes[i] >> j) & 1;
+        sos::Byte bit = (bytes[i] >> j) & 1;
         std::size_t pos = index[idx++];
         carrier[pos] = (carrier[pos] & ~1) | bit;
     }
