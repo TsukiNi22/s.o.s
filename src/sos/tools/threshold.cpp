@@ -45,16 +45,15 @@ void sos::tools::removeThreshold(sos::Bytes& bytes)
     for (sos::Byte byte: bytes) seen.insert(byte);
     std::size_t rangeUsed = seen.size();
 
-    /*
     if (rangeUsed < RANGE_USED_MIN) [[unlikely]] {
         throw std::out_of_range("Too few range used can't edit thresholds, the limit was reach: " + std::to_string(rangeUsed));
     } else if (rangeUsed > RANGE_USED_MAX) [[unlikely]] {
         throw std::out_of_range("Too many range used can't edit thresholds, the limit was reach: " + std::to_string(rangeUsed));
-    }*/
+    }
 
     // Remove those on threshold
     for (sos::Byte& byte: bytes) {
-        if (byte == THRESHOLD_MIN)      byte -= (byte > 0) ? 1 : -1;
-        else if (byte == THRESHOLD_MAX) byte += (byte > 0) ? 1 : -1;
+        if (byte == THRESHOLD_MIN)      byte -= (byte == 0) ? -1 : 1;
+        else if (byte == THRESHOLD_MAX) byte += (byte == UINTN_MAX) ? -1 : 1;
     }
 }

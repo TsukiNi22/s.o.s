@@ -33,7 +33,7 @@ namespace sos { // namespace start
 /* TYPE */
 
 /* type simplification */
-using Byte = std::uint64_t;
+using Byte = std::uint16_t;
 using Bytes = std::vector<sos::Byte>;
 using Key = Bytes;
 
