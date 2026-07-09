@@ -27,7 +27,6 @@ File Description:
 #include <optional>                 // std::optional
 #include <cstdint>                  // std::uint8_t, std::uint_fast32_t
 #include <random>                   // std::mt19937
-#include <new>                      // std::hardware_destructive_interference_size
 
 namespace sos::algorithm { // namespace start
 
@@ -37,12 +36,13 @@ template<sos::Option options = sos::Option::None, std::uint8_t magic = MAGIC>
 [[deprecated("This version isn't the most optimized one, you should use sos_embed_optimized or sos_embed")]]
 void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const std::optional<sos::Key>& key = std::nullopt)
 {
-    alignas(std::hardware_destructive_interference_size) std::vector<std::uint_fast32_t> index;
-    alignas(std::hardware_destructive_interference_size) sos::Bytes bytes;
+    std::vector<std::uint_fast32_t> index;
+    sos::Bytes bytes;
 
     // Setup message (header data + payload)
-    bytes.push_back(magic);
     std::size_t size = payload.size();
+    bytes.reserve(1 + std::max(std::size_t{1}, sizeof(size) / sizeof(sos::Byte)) + payload.size());
+    bytes.push_back(magic);
     for (std::size_t i = 0; i < std::max(std::size_t{1}, sizeof(size) / sizeof(sos::Byte)); ++i) bytes.push_back((size >> (sizeof(sos::Byte) * 8 * i)) & UINTN_MAX);
     bytes.insert(bytes.end(), payload.begin(), payload.end());
 

@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 09/07/2026 by @author Tsukini
+##  @date 10/07/2026 by @author Tsukini
 
 File Name:
 ##  @file convert.hpp
@@ -41,7 +41,7 @@ sos::Bytes to_bytes(const Range& range)
 
     std::vector<std::uint8_t> raw;
     raw.reserve(std::ranges::size(range) * sizeof(T));
-    for (const T& value : range) {
+    for (const T& value: range) {
         const auto* ptr = reinterpret_cast<const std::uint8_t*>(&value);
         raw.insert(raw.end(), ptr, ptr + sizeof(T));
     }
@@ -67,7 +67,7 @@ Range bytes_to(const sos::Bytes& bytes)
     }
 
     Range range;
-    if constexpr (requires { range.reserve(0); }) [[likely]] {
+    if constexpr (requires {range.reserve(0);}) [[likely]] {
         range.reserve(raw_size / sizeof(T));
     }
 
@@ -75,7 +75,7 @@ Range bytes_to(const sos::Bytes& bytes)
     for (std::size_t i = 0; i < raw_size; i += sizeof(T)) {
         T value;
         std::memcpy(&value, raw + i, sizeof(T));
-        if constexpr (requires { range.push_back(value); }) [[likely]] {
+        if constexpr (requires {range.push_back(value);}) [[likely]] {
             range.push_back(value);
         } else {
             range.insert(range.end(), value);

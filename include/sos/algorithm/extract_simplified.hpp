@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 09/07/2026 by @author Tsukini
+##  @date 10/07/2026 by @author Tsukini
 
 File Name:
 ##  @file extract_simplified.hpp
@@ -25,7 +25,6 @@ File Description:
 #include <stdexcept>                // std::* (exception)
 #include <optional>                 // std::optional
 #include <cstdint>                  // std::uint8_t, std::uint_fast32_t
-#include <new>                      // std::hardware_destructive_interference_size
 
 namespace sos::algorithm { // namespace start
 
@@ -35,8 +34,8 @@ template<std::uint8_t magic = MAGIC>
 [[deprecated("This version isn't the most optimized one, you should use sos_extract_optimized or sos_extract")]]
 [[nodiscard]] sos::Bytes sos_extract_simplified(const sos::Bytes& carrier, const std::optional<sos::Key>& key = std::nullopt)
 {
-    alignas(std::hardware_destructive_interference_size) std::vector<std::uint_fast32_t> index;
-    alignas(std::hardware_destructive_interference_size) sos::Bytes bytes;
+    std::vector<std::uint_fast32_t> index;
+    sos::Bytes bytes;
 
     // Get the valid index within the accepted amplitude
     sos::tools::getThresholdIndex(index, carrier);

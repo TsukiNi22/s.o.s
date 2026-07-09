@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 09/07/2026 by @author Tsukini
+##  @date 10/07/2026 by @author Tsukini
 
 File Name:
 ##  @file threshold.cpp
@@ -30,11 +30,10 @@ File Description:
 
 void sos::tools::getThresholdIndex(std::vector<std::uint_fast32_t>& index, const sos::Bytes& bytes)
 {
-    static bool init = false;
-    if (!init) [[unlikely]] {init = true; index.reserve(bytes.size());}
     index.clear();
+    index.reserve(bytes.size());
     for (std::size_t i = 0; i < bytes.size(); ++i) {
-        if (bytes[i] >= THRESHOLD_MIN && __builtin_expect(bytes[i] <= THRESHOLD_MAX, 1)) [[likely]] {index.push_back(i);}
+        if (bytes[i] >= THRESHOLD_MIN && bytes[i] <= THRESHOLD_MAX) [[likely]] {index.push_back(i);}
     }
 }
 

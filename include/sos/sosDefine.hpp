@@ -44,7 +44,7 @@ File Description:
     /* limits */
     #define RMS_LIMIT 250.0 // 100 ~ 5000 normal
     #define PAYLOAD_PERCENTAGE_LIMIT 0.075 // The payload can only be x percent of the total signal at max
-    #define THRESHOLD_MIN (1ull << (sizeof(sos::Byte) * 8 / 2) - 1ull)
+    #define THRESHOLD_MIN ((1ull << (sizeof(sos::Byte) * 8 / 2)) - 1ull)
     #define THRESHOLD_MAX (UINTN_MAX - (1ull << (sizeof(sos::Byte) * 8 / 2)) + 1ull)
     #define RANGE_USED_MIN std::min(2048.0, UINTN_MAX * 0.05) // Need at least x percentage of the whole range to ensure some security
     #define RANGE_USED_MAX (UINTN_MAX * (1.0 - 0.05)) // Need less than x percentage of the whole range to ensure some security
