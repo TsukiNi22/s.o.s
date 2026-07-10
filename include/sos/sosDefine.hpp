@@ -27,7 +27,7 @@ File Description:
     /* type */
     #include "sosType.hpp"  // sos::Byte
     #include <cstdint>      // std::uint8_t
-    #include <limits>       // std::numeric_limits<T>
+    #include <limits>       // std::numeric_limits<T>, UINT16_MAX
 
     //----------------------------------------------------------------//
     /* DEFINE */
@@ -42,7 +42,7 @@ File Description:
     #define UINTN_MAX std::numeric_limits<sos::Byte>::max()
 
     /* limits */
-    #define RMS_LIMIT 250.0 // 100 ~ 5000 normal
+    #define RMS_LIMIT 250.0 * (static_cast<double>(UINTN_MAX) / static_cast<double>(UINT16_MAX)) // 100 ~ 5000 normal (scaled on a base of uint16_t)
     #define PAYLOAD_PERCENTAGE_LIMIT 0.075 // The payload can only be x percent of the total signal at max
     #define THRESHOLD_MIN ((1ull << (sizeof(sos::Byte) * 8 / 2)) - 1ull)
     #define THRESHOLD_MAX (UINTN_MAX - (1ull << (sizeof(sos::Byte) * 8 / 2)) + 1ull)

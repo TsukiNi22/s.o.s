@@ -27,17 +27,19 @@ File Description:
 #include <random>               // std::random_device, std::mt19937, std::normal_distribution
 #include <vector>               // std::vector
 
+#include <iostream>
 /* global */
 void sos::tools::noise(sos::Bytes& bytes)
 {
     // Compute signal amplitudes RMS
     double rms = 0.0;
     for (sos::Byte byte: bytes) rms += static_cast<double>(byte) * static_cast<double>(byte);
-    rms /= static_cast<double>(bytes.size());
+    rms = std::sqrt(rms / static_cast<double>(bytes.size()));
 
     // Check if the noise won't litteraly become the content
-    if (rms < RMS_LIMIT * RMS_LIMIT)
+    if (rms < RMS_LIMIT)
         throw std::out_of_range("RMS is too small");
+    std::cout << "RMS: " << rms << " / " << RMS_LIMIT<< std::endl;
 
     // Noise generation setup
     static thread_local std::random_device rd;
@@ -55,11 +57,12 @@ void sos::tools::noise(sos::Bytes& bytes, const std::vector<std::uint_fast32_t>&
     // Compute signal amplitudes RMS
     double rms = 0.0;
     for (std::uint_fast32_t i: index) rms += static_cast<double>(bytes[i]) * static_cast<double>(bytes[i]);
-    rms /= static_cast<double>(index.size());
+    rms = std::sqrt(rms / static_cast<double>(index.size()));
 
     // Check if the noise won't litteraly become the content
-    if (rms < RMS_LIMIT * RMS_LIMIT)
+    if (rms < RMS_LIMIT)
         throw std::out_of_range("RMS is too small");
+    std::cout << "RMS: " << rms << " / " << RMS_LIMIT<< std::endl;
 
     // Noise generation setup
     static thread_local std::random_device rd;

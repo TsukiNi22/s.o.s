@@ -68,6 +68,9 @@ void sos_embed_simplified(sos::Bytes& carrier, const sos::Bytes& payload, const 
     sos::tools::getThresholdIndex(index, carrier);
 
     // Check if the payload can be hiden in the carrier
+    if (index.size() == 0) [[unlikely]] {
+        throw std::out_of_range("Too few valide bytes that allow data storage, none where found!");
+    }
     double percentage = static_cast<double>(sizeof(sos::Byte) * 8 * bytes.size()) / static_cast<double>(index.size());
     if (percentage > PAYLOAD_PERCENTAGE_LIMIT * 100.0) [[unlikely]] {
         throw std::out_of_range("Too few valide bytes that allow data storage, the payload percentage limit was reach: " + std::to_string(percentage / 100.0) + "%");

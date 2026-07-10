@@ -25,7 +25,7 @@ File Description:
     /* INCLUDE */
 
     /* type */
-    #include <cstdint>  // std::uint16_t
+    #include <cstdint>  // std::uint8_t
     #include <vector>   // std::vector
 
 namespace sos { // namespace start
