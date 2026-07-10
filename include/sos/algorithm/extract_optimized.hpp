@@ -25,22 +25,28 @@ File Description:
 #include <stdexcept>                // std::* (exception)
 #include <optional>                 // std::optional
 #include <cstdint>                  // std::uint8_t, std::uint_fast32_t
+#include <vector>                   // std::vector
 
 namespace sos::algorithm { // namespace start
 
 #ifndef SOS_EXTRACT_OPTIMIZED
     #define SOS_EXTRACT_OPTIMIZED
-template<std::uint8_t magic = MAGIC>
-[[nodiscard]] sos::Bytes sos_extract_optimized(const sos::Bytes& carrier, const std::optional<sos::Key>& key = std::nullopt)
+template<std::uint8_t magic = MAGIC, typename ByteT>
+[[nodiscard]] std::vector<ByteT> sos_extract_optimized(const std::vector<ByteT>& carrier, const std::optional<std::vector<ByteT>>& key = std::nullopt)
 {
+    // Check given type
+    static_assert(std::unsigned_integral<ByteT>, "ByteT must be an unsigned integer type");
+    using Byte  = ByteT;
+    using Bytes = std::vector<Byte>;
+
     std::vector<std::uint_fast32_t> index;
-    sos::Bytes bytes;
+    Bytes bytes;
 
     // Get the valid index within the accepted amplitude
     sos::tools::getThresholdIndex(index, carrier);
 
     // Check for the minimum space that is required (magic + size) + index used for the seed
-    if (index.size() < (sizeof(sos::Byte) + std::max(std::size_t{1}, sizeof(std::size_t) / sizeof(sos::Byte))) * 8 + SEED_ELEMENT_COUNT) [[unlikely]] {
+    if (index.size() < (sizeof(Byte) + std::max(std::size_t{1}, sizeof(std::size_t) / sizeof(Byte))) * 8 + SEED_ELEMENT_COUNT) [[unlikely]] {
         throw std::out_of_range("Too few valide bytes that allow data storage, no hidden message");
     }
 
@@ -50,7 +56,7 @@ template<std::uint8_t magic = MAGIC>
 
     // Apply key to the seed if given
     if (key.has_value()) [[unlikely]] {
-        for (sos::Byte byte: *key) {
+        for (Byte byte: *key) {
             seed ^= static_cast<std::uint_fast32_t>(byte);
             seed *= 16777619u;
         }
@@ -62,18 +68,18 @@ template<std::uint8_t magic = MAGIC>
 
     // Reading byte methode
     std::size_t idx = 0;
-    auto read_byte = [&](sos::Byte& byte)
+    auto read_byte = [&](Byte& byte)
     {
         byte = 0;
-        for (std::size_t b = 0; b < sizeof(sos::Byte) * 8; ++b) {
+        for (std::size_t b = 0; b < sizeof(Byte) * 8; ++b) {
             std::size_t pos = index[idx++];
-            sos::Byte bit = carrier[pos] & 1;
+            Byte bit = carrier[pos] & 1;
             byte |= (bit << b);
         }
     };
 
     // Check the header (magic)
-    sos::Byte identifier = 0;
+    Byte identifier = 0;
     read_byte(identifier);
     if (identifier != magic) [[unlikely]] {
         throw std::invalid_argument("Invalid MAGIC byte, no hidden message");
@@ -81,15 +87,15 @@ template<std::uint8_t magic = MAGIC>
 
     // Check the header (size)
     std::size_t size = 0;
-    for (std::size_t i = 0; i < std::max(std::size_t{1}, sizeof(std::size_t) / sizeof(sos::Byte)); ++i) {
-        sos::Byte byte = 0;
+    for (std::size_t i = 0; i < std::max(std::size_t{1}, sizeof(std::size_t) / sizeof(Byte)); ++i) {
+        Byte byte = 0;
         read_byte(byte);
-        size |= (static_cast<std::size_t>(byte) << (sizeof(sos::Byte) * 8 * i));
+        size |= (static_cast<std::size_t>(byte) << (sizeof(Byte) * 8 * i));
     }
 
     // Check if there is place for the index used for the seed & payload
-    if (index.size() < sizeof(sos::Byte) * 8 * size + SEED_ELEMENT_COUNT) [[unlikely]] {
-        throw std::out_of_range("Invalid carrier, there is less valide bytes that allow data storage than excepted: " + std::to_string(sizeof(sos::Byte) * 8 * size + SEED_ELEMENT_COUNT));
+    if (index.size() < sizeof(Byte) * 8 * size + SEED_ELEMENT_COUNT) [[unlikely]] {
+        throw std::out_of_range("Invalid carrier, there is less valide bytes that allow data storage than excepted: " + std::to_string(sizeof(Byte) * 8 * size + SEED_ELEMENT_COUNT));
     }
 
     // Get the payload

@@ -33,9 +33,14 @@ namespace sos::tools { // namespace start
 //----------------------------------------------------------------//
 /* PROTOTYPE */
 
-template<std::ranges::input_range Range>
-sos::Bytes to_bytes(const Range& range)
+template<typename ByteT = sos::Byte, std::ranges::input_range Range>
+std::vector<ByteT> to_bytes(const Range& range)
 {
+    // Check given type
+    static_assert(std::unsigned_integral<ByteT>, "ByteT must be an unsigned integer type");
+    using Byte = ByteT;
+    using Bytes = std::vector<Byte>;
+
     using T = std::ranges::range_value_t<Range>;
     static_assert(std::is_trivially_copyable_v<T>, "Element type must be trivially copyable.");
 
@@ -46,22 +51,26 @@ sos::Bytes to_bytes(const Range& range)
         raw.insert(raw.end(), ptr, ptr + sizeof(T));
     }
 
-    std::size_t byte_count = (raw.size() + sizeof(sos::Byte) - 1) / sizeof(sos::Byte);
-    raw.resize(byte_count * sizeof(sos::Byte), 0);
+    std::size_t byte_count = (raw.size() + sizeof(Byte) - 1) / sizeof(Byte);
+    raw.resize(byte_count * sizeof(Byte), 0);
 
-    sos::Bytes bytes(byte_count);
+    Bytes bytes(byte_count);
     std::memcpy(bytes.data(), raw.data(), raw.size());
 
     return bytes;
 }
 
-template<std::ranges::input_range Range>
-Range bytes_to(const sos::Bytes& bytes)
+template<std::ranges::input_range Range, typename ByteT>
+Range bytes_to(const std::vector<ByteT>& bytes)
 {
+    // Check given type
+    static_assert(std::unsigned_integral<ByteT>, "ByteT must be an unsigned integer type");
+    using Byte = ByteT;
+
     using T = std::ranges::range_value_t<Range>;
     static_assert(std::is_trivially_copyable_v<T>, "Element type must be trivially copyable.");
 
-    std::size_t raw_size = bytes.size() * sizeof(sos::Byte);
+    std::size_t raw_size = bytes.size() * sizeof(Byte);
     if (raw_size % sizeof(T) != 0) [[unlikely]] {
         throw std::invalid_argument("Invalid byte count.");
     }

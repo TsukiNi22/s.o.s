@@ -25,17 +25,17 @@ File Description:
     /* INCLUDE */
 
     /* type */
-    #include <cstdint>  // std::uint8_t
+    #include <cstdint>  // std::uint16_t
     #include <vector>   // std::vector
 
 namespace sos { // namespace start
 //----------------------------------------------------------------//
 /* TYPE */
 
-/* type simplification */
-using Byte = std::uint16_t;
+/* type simplification (default) */
+using Byte  = std::uint16_t; // Default Byte type
 using Bytes = std::vector<sos::Byte>;
-using Key = Bytes;
+using Key   = sos::Bytes;
 
 } // namespace end
 #endif /* SOSTYPE_H */
