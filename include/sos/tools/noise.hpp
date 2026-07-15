@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 10/07/2026 by @author Tsukini
+##  @date 15/07/2026 by @author Tsukini
 
 File Name:
 ##  @file noise.hpp
@@ -20,18 +20,14 @@ File Description:
 #ifndef NOISE_H
     #define NOISE_H
 
-    //----------------------------------------------------------------//
-    /* INCLUDE */
-
-    /* type */
-    #include "../sosDefine.hpp" // sos::* (define)
-    #include "../sosType.hpp"   // sos::* (type)
-    #include <stdexcept>        // std::* (exception)
-    #include <algorithm>        // std::clamp
-    #include <optional>         // std::optional
-    #include <cstdint>          // std::uint_fast32_t
-    #include <random>           // std::random_device, std::mt19937, std::normal_distribution
-    #include <vector>           // std::vector
+#include "../sosDefine.hpp" // sos::* (define)
+#include "../sosType.hpp"   // sos::* (type)
+#include <stdexcept>        // std::* (exception)
+#include <algorithm>        // std::clamp
+#include <optional>         // std::optional
+#include <cstdint>          // std::uint_fast32_t
+#include <random>           // std::random_device, std::mt19937, std::normal_distribution
+#include <vector>           // std::vector
 
 namespace sos::tools { // namespace start
 //----------------------------------------------------------------//

@@ -3,6 +3,8 @@ name: CD - Algorithm
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   sync-library:
@@ -34,8 +36,11 @@ jobs:
           # Change namespace and macro usages
           find s.o.s/include/sos/ -type f \( -name "*" \) \
             -exec sed -i \
-            -e 's/namespace sos/namespace utils::algorithms::sos/' \
             -e 's/\bsos::/utils::algorithms::sos::/g' \
+            {} +
+          find s.o.s/include/sos/ -type f \( -name "*" \) \
+            -exec sed -i \
+            -e 's/namespace sos/namespace utils::algorithms::sos/' \
             -e '/#include "\.\.\/sosDefine\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
             -e '/#include "algorithm\/embed_optimized\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
             -e 's/\[\[unlikely\]\]/unlikely/g' \
