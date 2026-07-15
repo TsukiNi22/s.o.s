@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 10/07/2026 by @author Tsukini
+##  @date 15/07/2026 by @author Tsukini
 
 File Name:
 ##  @file extract_optimized.hpp
@@ -21,10 +21,11 @@ File Description:
 #include "../sosType.hpp"           // sos::* (type)
 #include "../tools/threshold.hpp"   // sos::tools::getThresholdIndex
 #include "../tools/noise.hpp"       // sos::tools::noise
-#include "../tools/hash.hpp"        // sos::tools::hash
+#include "../tools/hash.hpp"        // sos::tools::hash, sos::tools::make_generator
 #include <stdexcept>                // std::* (exception)
 #include <optional>                 // std::optional
 #include <cstdint>                  // std::uint8_t, std::uint_fast32_t
+#include <random>                   // std::mt19937
 #include <vector>                   // std::vector
 
 namespace sos::algorithm { // namespace start
@@ -54,16 +55,8 @@ template<std::uint8_t magic = MAGIC, typename ByteT>
     std::uint_fast32_t seed = sos::tools::hash(index, carrier);
     index.resize(index.size() - SEED_ELEMENT_COUNT);
 
-    // Apply key to the seed if given
-    if (key.has_value()) [[unlikely]] {
-        for (Byte byte: *key) {
-            seed ^= static_cast<std::uint_fast32_t>(byte);
-            seed *= 16777619u;
-        }
-    }
-
     // Shuffle the index using the generated seed
-    std::mt19937 gen(seed);
+    std::mt19937 gen = sos::tools::make_generator(seed, key);
     std::shuffle(index.begin(), index.end(), gen);
 
     // Reading byte methode
