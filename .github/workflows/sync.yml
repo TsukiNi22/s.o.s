@@ -34,7 +34,7 @@ jobs:
           set -e
 
           # Change namespace and macro usages
-          find s.o.s/include/s.o.s/ -type f \( -name "*" \) \
+          find s.o.s/include/sos/ -type f \( -name "*" \) \
             -exec sed -i \
             -e 's/namespace sos/namespace utils::algorithms::sos/' \
             -e 's/\bsos::/utils::algorithms::sos::/g' \
@@ -47,8 +47,8 @@ jobs:
             {} +
 
           # Move files
-          rm -rf my_lib_cpp/include/utils/algorithms/s.o.s
-          cp -r s.o.s/include/s.o.s my_lib_cpp/include/utils/algorithms/s.o.s
+          rm -rf my_lib_cpp/include/utils/algorithms/sos
+          cp -r s.o.s/include/sos my_lib_cpp/include/utils/algorithms/sos
 
       - name: Commit and push
         working-directory: my_lib_cpp
