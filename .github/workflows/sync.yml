@@ -1,0 +1,65 @@
+name: CD - Algorithm
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  sync-library:
+    runs-on: ${{ vars.RUNNER }}
+    defaults:
+      run:
+        shell: bash
+
+    container:
+      image: ghcr.io/tsukini22/ci:latest
+
+    steps:
+      - name: Checkout s.o.s
+        uses: actions/checkout@v5
+        with:
+          path: s.o.s
+
+      - name: Checkout my_lib_cpp
+        uses: actions/checkout@v5
+        with:
+          repository: TsukiNi22/my_lib_cpp
+          token: ${{ secrets.LIBRARY_REPO_TOKEN }}
+          path: my_lib_cpp
+
+      - name: Sync files into library
+        run: |
+          set -e
+
+          # Change namespace and macro usages
+          find s.o.s/include/s.o.s/ -type f \( -name "*" \) \
+            -exec sed -i \
+            -e 's/namespace sos/namespace utils::algorithms::sos/' \
+            -e 's/\bsos::/utils::algorithms::sos::/g' \
+            -e '/#include "\.\.\/sosDefine\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
+            -e '/#include "algorithm\/embed_optimized\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
+            -e 's/\[\[unlikely\]\]/unlikely/g' \
+            -e 's/\[\[likely\]\]/likely/g' \
+            -e 's/\[\[nodiscard\]\]/nodiscard/g' \
+            -e 's/\[\[maybe_unused\]\]/unused/g' \
+            {} +
+
+          # Move files
+          rm -rf my_lib_cpp/include/utils/algorithms/s.o.s
+          cp -r s.o.s/include/s.o.s my_lib_cpp/include/utils/algorithms/s.o.s
+
+      - name: Commit and push
+        working-directory: my_lib_cpp
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add include/utils/algorithms/
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+            exit 0
+          fi
+          git commit -m "chore: sync algorithm from s.o.s (${{ github.sha }})"
+          git push origin main

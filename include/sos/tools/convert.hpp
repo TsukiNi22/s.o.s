@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 10/07/2026 by @author Tsukini
+##  @date 15/07/2026 by @author Tsukini
 
 File Name:
 ##  @file convert.hpp
@@ -24,10 +24,12 @@ File Description:
     /* INCLUDE */
 
     /* type */
+    #include "../sosDefine.hpp" // sos::* (define)
     #include "../sosType.hpp"   // sos::* (type)
-    #include <concepts>
-    #include <cstring>
-    #include <ranges>
+    #include <exception>        // std::invalid_argument
+    #include <concepts>         // requires
+    #include <cstring>          // std::memcpy
+    #include <ranges>           // std::ranges::*
 
 namespace sos::tools { // namespace start
 //----------------------------------------------------------------//
