@@ -41,10 +41,10 @@ jobs:
             -e 's/namespace sos/namespace utils::algorithms::sos/' \
             -e '/#include "\.\.\/sosDefine\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
             -e '/#include "algorithm\/embed_optimized\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
-            -e 's/\[\[unlikely\]\]/unlikely/g' \
-            -e 's/\[\[likely\]\]/likely/g' \
-            -e 's/\[\[nodiscard\]\]/nodiscard/g' \
-            -e 's/\[\[maybe_unused\]\]/unused/g' \
+            -e 's/\[\[unlikely\]\]/_unlikely/g' \
+            -e 's/\[\[likely\]\]/_likely/g' \
+            -e 's/\[\[nodiscard\]\]/_nodiscard/g' \
+            -e 's/\[\[maybe_unused\]\]/_unused/g' \
             {} +
 
           # Move files
