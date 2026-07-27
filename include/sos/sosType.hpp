@@ -32,9 +32,9 @@ namespace sos { // namespace start
 /* TYPE */
 
 /* type simplification (default) */
-[[maybe_unused]] using Byte  = std::uint16_t; // Default Byte type
-[[maybe_unused]] using Bytes = std::vector<sos::Byte>;
-[[maybe_unused]] using Key   = sos::Bytes;
+using Byte  [[maybe_unused]] = std::uint16_t; // Default Byte type
+using Bytes [[maybe_unused]] = std::vector<sos::Byte>;
+using Key   [[maybe_unused]] = sos::Bytes;
 
 } // namespace end
 #endif /* SOSTYPE_H */
