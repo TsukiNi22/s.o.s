@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  @date 16/07/2026 by @author Tsukini
+##  @date 27/07/2026 by @author Tsukini
 
 File Name:
 ##  @file sosType.hpp
@@ -32,9 +32,9 @@ namespace sos { // namespace start
 /* TYPE */
 
 /* type simplification (default) */
-using Byte  = std::uint16_t; // Default Byte type
-using Bytes = std::vector<sos::Byte>;
-using Key   = sos::Bytes;
+[[maybe_unused]] using Byte  = std::uint16_t; // Default Byte type
+[[maybe_unused]] using Bytes = std::vector<sos::Byte>;
+[[maybe_unused]] using Key   = sos::Bytes;
 
 } // namespace end
 #endif /* SOSTYPE_H */
