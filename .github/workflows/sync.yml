@@ -25,7 +25,7 @@ jobs:
         with:
           repository: TsukiNi22/libutils
           token: ${{ secrets.LIBRARY_REPO_TOKEN }}
-          path: y_lib_cpp
+          path: libutils
 
       - name: Sync files into library
         run: |
@@ -48,9 +48,6 @@ jobs:
             {} +
 
           # Move files
-          apt-get update
-          apt-get install tree
-          tree
           rm -rf libutils/include/utils/algorithms/sos
           cp -r s.o.s/include/sos libutils/include/utils/algorithms/sos
 
