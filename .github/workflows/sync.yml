@@ -48,8 +48,8 @@ jobs:
             {} +
 
           # Move files
-          sudo apt-get update
-          sudo apt-get install tree
+          apt-get update
+          apt-get install tree
           tree
           rm -rf libutils/include/utils/algorithms/sos
           cp -r s.o.s/include/sos libutils/include/utils/algorithms/sos
