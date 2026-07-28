@@ -48,6 +48,7 @@ jobs:
             {} +
 
           # Move files
+          tree
           rm -rf libutils/include/utils/algorithms/sos
           cp -r s.o.s/include/sos libutils/include/utils/algorithms/sos
 
