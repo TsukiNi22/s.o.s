@@ -20,12 +20,12 @@ jobs:
         with:
           path: s.o.s
 
-      - name: Checkout my_lib_cpp
+      - name: Checkout libutils
         uses: actions/checkout@v5
         with:
-          repository: TsukiNi22/my_lib_cpp
+          repository: TsukiNi22/libutils
           token: ${{ secrets.LIBRARY_REPO_TOKEN }}
-          path: my_lib_cpp
+          path: y_lib_cpp
 
       - name: Sync files into library
         run: |
@@ -48,11 +48,11 @@ jobs:
             {} +
 
           # Move files
-          rm -rf my_lib_cpp/include/utils/algorithms/sos
-          cp -r s.o.s/include/sos my_lib_cpp/include/utils/algorithms/sos
+          rm -rf libutils/include/utils/algorithms/sos
+          cp -r s.o.s/include/sos libutils/include/utils/algorithms/sos
 
       - name: Commit and push
-        working-directory: my_lib_cpp
+        working-directory: libutils
         run: |
           set -e
           git config user.name "github-actions[bot]"
