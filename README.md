@@ -127,4 +127,12 @@ The check on the carrier ensure that the payload won't destroy the carrier or cr
 
 
 ## Licence
-![CC-BY-NC-4.0](https://img.shields.io/badge/build-CC--BY--NC--4.0-brightgreen?style=for-the-badge&logo=github&label=Licence&link=https%3A%2F%2Fgithub.com%2FTsukiNi22%2Fc2dmp-hsm%2Fblob%2Fmain%2FLICENSE.md)
+![CC-BY-NC-SA-4.0](https://img.shields.io/badge/build-CC--BY--NC--SA--4.0-brightgreen?style=for-the-badge&logo=github&label=Licence&link=https%3A%2F%2Fgithub.com%2FTsukiNi22%2Fs.o.s%2Fblob%2Fmain%2FLICENSE.md)
+
+This project is licensed under [CC BY-NC-SA 4.0](LICENSE.md) (`CC-BY-NC-SA-4.0`):
+- free for personal and educational use, modification and sharing, with credit to **Tsukini**
+- any adapted work must be shared under the same license and keep the credit
+- no commercial use, of this project or of any adapted work, without the author's agreement
+
+> [!NOTE]
+> For commercial use, contact [Tsukini on GitHub](https://github.com/TsukiNi22) to discuss a separate license.
