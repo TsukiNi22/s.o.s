@@ -39,17 +39,46 @@ jobs:
           find s.o.s/include/sos/ -type f \( -name "*" \) \
             -exec sed -i \
             -e 's/namespace sos/namespace utils::algorithms::sos/' \
-            -e '/#include "\.\.\/sosDefine\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
-            -e '/#include "algorithm\/embed_optimized\.hpp"/i #include "utils/attribute/Attribute.hpp"' \
+            {} +
+
+          # Add the attribute include (before the first include) in every file using an attribute
+          grep -rlE '\[\[(unlikely|likely|nodiscard|maybe_unused|gnu::hot|gnu::cold)\]\]' s.o.s/include/sos/ \
+            | xargs -r sed -i '0,/^\s*#include/s//    #include "utils\/attribute\/Attribute.hpp"\n&/'
+
+          # Replace the attributes by the libutils macros
+          find s.o.s/include/sos/ -type f \( -name "*" \) \
+            -exec sed -i \
             -e 's/\[\[unlikely\]\]/_unlikely/g' \
             -e 's/\[\[likely\]\]/_likely/g' \
             -e 's/\[\[nodiscard\]\]/_nodiscard/g' \
             -e 's/\[\[maybe_unused\]\]/_unused/g' \
+            -e 's/\[\[gnu::hot\]\]/_hot/g' \
+            -e 's/\[\[gnu::cold\]\]/_cold/g' \
             {} +
+
+          # Check that no standard attribute is left
+          if grep -rn '\[\[' s.o.s/include/sos/; then
+            echo "::error title=Sync::Standard attribute without libutils macro mapping"
+            exit 1
+          fi
 
           # Move files
           rm -rf libutils/include/utils/algorithms/sos
           cp -r s.o.s/include/sos libutils/include/utils/algorithms/sos
+
+      - name: Check synced headers
+        working-directory: libutils
+        run: |
+          set -e
+
+          # Every header must compile alone inside libutils
+          for header in $(find include/utils/algorithms/sos -name "*.hpp"); do
+            echo "Checking $header"
+            clang++ -std=c++20 -W -Wall -Wextra -Wshadow -Werror -Wno-#warnings -fsyntax-only -x c++ "$header" -Iinclude
+          done
+
+          # And through the libutils root include
+          printf '#define _SOS\n#include <utils/utils.hpp>\n' | clang++ -std=c++20 -Wno-#warnings -fsyntax-only -x c++ - -Iinclude
 
       - name: Commit and push
         working-directory: libutils
